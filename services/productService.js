@@ -13,6 +13,13 @@ async function getProducts() {
   // 請實作此函式
   // 提示：使用 fetchProducts() 取得產品陣列
   // 回傳格式：{ products, count: 產品數量 }
+  try {
+    const products = await fetchProducts();
+    return { products, count: products.length };
+  } catch (err) {
+    console.log('取得產品失敗:', err);
+    return null;
+  }
 }
 
 /**
@@ -24,6 +31,13 @@ async function getProductsByCategory(category) {
   // 請實作此函式
   // 提示：使用 fetchProducts() 取得所有產品後，篩選出符合 category 的產品
   // 回傳格式：篩選後的產品陣列
+  try {
+    const products = await fetchProducts();
+    return products.filter(product => product.category === category);
+  } catch (err) {
+    console.log('篩選產品失敗:', err);
+    return null;
+  }
 }
 
 /**
@@ -35,6 +49,13 @@ async function getProductById(productId) {
   // 請實作此函式
   // 提示：使用 fetchProducts() 取得所有產品後，找出 id 符合的產品
   // 若找不到，回傳 null
+  try {
+    const products = await fetchProducts();
+    return products.find(product => product.id === productId) || null;
+  } catch (err) {
+    console.log('取得產品失敗:', err);
+    return null;
+  }
 }
 
 /**
@@ -44,6 +65,13 @@ async function getProductById(productId) {
 async function getCategories() {
   // 請實作此函式
   // 提示：使用 fetchProducts() 取得所有產品後，代入到 utils getAllCategories()
+  try {
+    const products = await fetchProducts();
+    return getAllCategories(products);
+  } catch (err) {
+    console.log('取得分類失敗:', err);
+    return null;
+  }
 }
 
 /**
@@ -63,6 +91,20 @@ function displayProducts(products) {
   //    原價：NT$ 1,000
   //    售價：NT$ 800 (8折)
   // ----------------------------------------
+  try {
+    console.log('產品列表：');
+    console.log('----------------------------------------');
+    products.forEach((product, index) => {
+      const discountRate = getDiscountRate(product);
+      console.log(`${index + 1}. ${product.title}`);
+      console.log(`分類：${product.category}`);
+      console.log(`原價：${formatCurrency(product.origin_price)}`);
+      console.log(`售價：${formatCurrency(product.price)} (${discountRate})`);
+      console.log('----------------------------------------');
+    });
+  } catch (err) {
+    console.log('顯示產品失敗:', err);
+  }
 }
 
 module.exports = {
